@@ -25,19 +25,18 @@ export default function Dashboard() {
     const router = useRouter();
 
     useEffect(() => {
+        const fetchTodos = async () => {
+            try {
+                const res = await apiClient.get("/todos");
+                setTodos(res.data);
+            } catch {
+                router.push("/auth");
+            } finally {
+                setLoading(false);
+            }
+        };
         fetchTodos();
-    }, []);
-
-    const fetchTodos = async () => {
-        try {
-            const res = await apiClient.get("/todos");
-            setTodos(res.data);
-        } catch (err) {
-            router.push("/auth");
-        } finally {
-            setLoading(false);
-        }
-    };
+    }, [router]);
 
     const handleAddTodo = async (e: React.FormEvent) => {
         e.preventDefault();
